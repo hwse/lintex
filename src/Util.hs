@@ -15,8 +15,18 @@ firstRegexGroup :: String -> String -> Maybe String
 firstRegexGroup regex text = let (_, _, _, groups) = text =~ regex :: (String, String, String, [String]) in
                              safeHead groups
 
+findAllRegexGroups :: String -> String -> [String]
+findAllRegexGroups regex text = let matches = getAllTextMatches (text =~ regex) :: [String] in
+                                fmap (Maybe.fromJust . firstRegexGroup regex) matches
+
 firstJust :: [Maybe a] -> Maybe a
 firstJust = Monad.join . List.find Maybe.isJust 
+
+flatMap :: (a -> [b]) -> [a] -> [b]
+flatMap function = Monad.join . fmap function
+
+mapJust :: (a -> Maybe b) -> [a] -> [b] 
+mapJust mapper list = fmap Maybe.fromJust $ filter Maybe.isJust $ fmap mapper list
 
 withIndex :: [a] -> [(Integer, a)]
 withIndex = zip [0..]

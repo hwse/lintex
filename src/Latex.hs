@@ -1,13 +1,15 @@
 module Latex where
 
+import Text.Regex.TDFA
+
 import qualified Control.Monad as Monad
 import qualified Data.List as List
 
 import Util
 
 data Position = Position {
-    file :: FilePath,
-    lineNr :: Integer
+    pFile :: FilePath,
+    pLineNr :: Integer
 } deriving (Show, Eq)
 
 data Line = Line Position String 
